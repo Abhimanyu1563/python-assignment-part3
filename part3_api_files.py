@@ -23,3 +23,28 @@ with open(filename, "a", encoding="utf-8") as file:
     file.write("Topic 7: APIs allow communication between systems.\n")
 
 print("Lines appended.")
+
+# -------- Task 1: File Read --------
+
+# Read file and print numbered lines
+with open(filename, "r", encoding="utf-8") as file:
+    lines = file.readlines()
+
+print("\nNumbered Lines:")
+for i, line in enumerate(lines, start=1):
+    print(f"{i}. {line.strip()}")
+
+# Count total lines
+print(f"\nTotal number of lines: {len(lines)}")
+
+# Keyword search
+keyword = input("\nEnter a keyword to search: ").lower()
+
+matches = [line.strip() for line in lines if keyword in line.lower()]
+
+if matches:
+    print("\nMatching lines:")
+    for line in matches:
+        print(line)
+else:
+    print("No matching lines found.")
