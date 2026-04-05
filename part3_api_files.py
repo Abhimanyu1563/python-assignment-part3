@@ -49,6 +49,7 @@ if matches:
 else:
     print("No matching lines found.")
 
+
 # -------- Task 2: API Integration --------
 
 
@@ -110,3 +111,97 @@ result = response.json()
 
 print("Response from server:")
 print(result)
+
+
+print("\n===== TASK 3: SAFE DIVIDE =====")
+
+def safe_divide(a, b):
+    try:
+        return a / b
+    except ZeroDivisionError:
+        return "Error: Cannot divide by zero"
+    except TypeError:
+        return "Error: Invalid input types"
+
+# Testing
+print(safe_divide(10, 2))
+print(safe_divide(10, 0))
+print(safe_divide("ten", 2))
+
+print("\n===== SAFE FILE READER =====")
+
+def read_file_safe(filename):
+    try:
+        with open(filename, "r", encoding="utf-8") as file:
+            content = file.read()
+            return content
+    except FileNotFoundError:
+        print(f"Error: File '{filename}' not found.")
+    finally:
+        print("File operation attempt complete.")
+
+# Testing
+print(read_file_safe("python_notes.txt"))
+print(read_file_safe("ghost_file.txt"))
+
+print(f"Fetched {len(products)} products successfully.")
+
+try:
+    response = requests.get("https://dummyjson.com/products?limit=20", timeout=5)
+    data = response.json()
+    products = data["products"]
+except requests.exceptions.ConnectionError:
+    print("Connection failed. Please check your internet.")
+except requests.exceptions.Timeout:
+    print("Request timed out. Try again later.")
+except Exception as e:
+    print("Error:", e)
+
+print("\n===== SAFE POST REQUEST =====")
+
+try:
+    response = requests.post("https://dummyjson.com/products/add", json=new_product, timeout=5)
+    result = response.json()
+    print("Response from server:")
+    print(result)
+except requests.exceptions.ConnectionError:
+    print("Connection failed. Please check your internet.")
+except requests.exceptions.Timeout:
+    print("Request timed out. Try again later.")
+except Exception as e:
+    print("Error:", e)
+
+print("\n===== PRODUCT SEARCH LOOP =====")
+
+while True:
+    user_input = input("Enter product ID (1-100) or 'quit': ")
+
+    if user_input.lower() == "quit":
+        print("Exiting program.")
+        break
+
+    if not user_input.isdigit():
+        print("Invalid input. Please enter a number.")
+        continue
+
+    product_id = int(user_input)
+
+    if product_id < 1 or product_id > 100:
+        print("Please enter a number between 1 and 100.")
+        continue
+
+    try:
+        response = requests.get(f"https://dummyjson.com/products/{product_id}", timeout=5)
+
+        if response.status_code == 404:
+            print("Product not found.")
+        else:
+            data = response.json()
+            print(f"{data['title']} - ${data['price']}")
+
+    except requests.exceptions.ConnectionError:
+        print("Connection failed.")
+    except requests.exceptions.Timeout:
+        print("Request timed out.")
+    except Exception as e:
+        print("Error:", e)
